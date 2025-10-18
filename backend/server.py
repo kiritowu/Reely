@@ -4,7 +4,10 @@ from pathlib import Path
 from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from browseruse_get_latest_articles import get_latest_articles_and_summarize, concurrent_summarize
+from browseruse_get_latest_articles import (
+    get_latest_articles_and_summarize,
+    concurrent_summarize,
+)
 
 from utils.elevenlabs import text_to_speech
 from utils.scene_converter import (
@@ -52,7 +55,9 @@ async def process_scene(scene: Scene, scene_index: int):
                 audio_bytes = await text_to_speech(scene.voice_over)
 
                 # Combine video and audio
-                final_video_path = await combine_video_audio_with_padding(sora_video_path, audio_bytes)
+                final_video_path = await combine_video_audio_with_padding(
+                    sora_video_path, audio_bytes
+                )
 
                 print(f"✓ Scene {scene_index} processed successfully")
                 return {
@@ -71,7 +76,9 @@ async def process_scene(scene: Scene, scene_index: int):
                 "error": error_msg,
             }
         except Exception as e:
-            error_msg = f"✗ Error processing scene {scene_index}: {type(e).__name__}: {str(e)}"
+            error_msg = (
+                f"✗ Error processing scene {scene_index}: {type(e).__name__}: {str(e)}"
+            )
             print(error_msg)
             return {
                 "scene_index": scene_index,
@@ -99,7 +106,7 @@ async def latest_articles(
     formatted_now = now.strftime("%Y-%m-%d_%H:%M:%S")
     parent_path = Path(__file__).parent / "../summaries"
 
-    with open(f"{parent_path}/{url.replace("/", "-")}_{formatted_now}.json", "w") as f:
+    with open(f"{parent_path}/{url.replace('/', '-')}_{formatted_now}.json", "w") as f:
         json.dump(summaries, f)
 
     return await generate_video(result)
@@ -111,7 +118,9 @@ async def summarize(
 ):
     print(f"Working on: {url}")
 
-    result: dict[str, str] = await concurrent_summarize([url], max_summary_length=MAX_SUMMARY_LENGTH)
+    result: dict[str, str] = await concurrent_summarize(
+        [url], max_summary_length=MAX_SUMMARY_LENGTH
+    )
 
     if len(result):
         result["status"] = "success"
@@ -151,7 +160,9 @@ async def generate_video(articles: Articles):
         valid_scenes = []
         for idx, result in enumerate(processed_scenes):
             if isinstance(result, Exception):
-                print(f"✗ Scene {idx} raised exception: {type(result).__names__}: {result}")
+                print(
+                    f"✗ Scene {idx} raised exception: {type(result).__names__}: {result}"
+                )
                 valid_scenes.append(
                     {
                         "scene_index": idx,
@@ -166,7 +177,9 @@ async def generate_video(articles: Articles):
                 valid_scenes.append(result)
             else:
                 print(f"✗ Scene {idx} returned unexpected result: {result}")
-                valid_scenes.append({"scene_index": idx, "error": "Unexpected result format"})
+                valid_scenes.append(
+                    {"scene_index": idx, "error": "Unexpected result format"}
+                )
 
         if not final_videos:
             print(f"✗ No valid videos generated for {article_url}")
@@ -189,4 +202,4 @@ async def generate_video(articles: Articles):
 
 
 if __name__ == "__main__":
-    uvicorn.run("server:app", host="127.0.0.1", port=3000)
+    uvicorn.run("server:app", host="127.0.0.1", port=8000)
