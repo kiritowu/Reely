@@ -6,6 +6,10 @@ Reely transforms any web source into engaging video reels and text summaries - f
 
 [![Cursor Hackathon Singapore 2025](https://img.shields.io/badge/Cursor%20Hackathon-Singapore%202025-6C5CE7?style=for-the-badge)](https://luma.com/cursor-hack-sg)
 
+## 📸 Showcase
+
+![Reely Showcase](.github/docs/showcase.jpg)
+
 ## 🌍 The Problem
 
 In today's world, we're drowning in fragmented, polarized, and language-siloed information. Breakthrough AI developments in Chinese media, alternative perspectives outside dominant narratives, and niche expert insights - all get lost in translation.

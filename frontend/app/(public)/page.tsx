@@ -65,7 +65,7 @@ export default function LandingPage() {
             </div>
 
             <div className="grid gap-6 sm:grid-cols-3 max-w-5xl w-full mt-8">
-              <div className="flex flex-col items-center gap-4 rounded-lg border border-white/5 bg-black/40 backdrop-blur-md p-6">
+              <div className="flex flex-col items-center gap-4 rounded-lg border border-white/10 bg-black/40 backdrop-blur-md p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20">
                   <Play className="h-6 w-6 text-primary" />
                 </div>
@@ -75,7 +75,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center gap-4 rounded-lg border border-white/5 bg-black/40 backdrop-blur-md p-6">
+              <div className="flex flex-col items-center gap-4 rounded-lg border border-white/10 bg-black/40 backdrop-blur-md p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20">
                   <Sparkles className="h-6 w-6 text-primary" />
                 </div>
@@ -85,7 +85,7 @@ export default function LandingPage() {
                 </p>
               </div>
 
-              <div className="flex flex-col items-center gap-4 rounded-lg border border-white/5 bg-black/40 backdrop-blur-md p-6">
+              <div className="flex flex-col items-center gap-4 rounded-lg border border-white/10 bg-black/40 backdrop-blur-md p-6">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/20">
                   <Zap className="h-6 w-6 text-primary" />
                 </div>
