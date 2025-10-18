@@ -3,7 +3,7 @@ import json
 from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from browseruse_get_latest_articles import get_latest_articles_and_summarize
+from browseruse_get_latest_articles import get_latest_articles_and_summarize, concurrent_summarize
 
 from utils.elevenlabs import text_to_speech
 from utils.scene_converter import (
@@ -101,6 +101,23 @@ async def latest_articles(
     return JSONResponse(content=result)
 
 
+@app.get("/summarize")
+async def summarize(
+    url: str = Query(..., description="URL to summarize"),
+):
+    print(f"Working on: {url}")
+
+    result: dict[str, str] = await concurrent_summarize([url], max_summary_length=4)
+
+    if len(result):
+        result["status"] = "success"
+    else:
+        result = {}
+        result["status"] = "failed"
+
+    return JSONResponse(content=result)
+
+
 class Articles(BaseModel):
     summaries: dict[str, str]
     status: str
@@ -130,7 +147,7 @@ async def generate_video(articles: Articles):
         valid_scenes = []
         for idx, result in enumerate(processed_scenes):
             if isinstance(result, Exception):
-                print(f"✗ Scene {idx} raised exception: {type(result).__name__}: {result}")
+                print(f"✗ Scene {idx} raised exception: {type(result).__names__}: {result}")
                 valid_scenes.append(
                     {
                         "scene_index": idx,

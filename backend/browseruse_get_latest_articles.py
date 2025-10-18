@@ -84,8 +84,10 @@ async def get_latest_articles(website: str, num_articles) -> list[str] | None:
     if result.is_done():
         urls = result.structured_output
         # Check if summarization was successful
-        if urls.successful:
+        if urls and urls.successful:
             return urls.urls
+
+    return None
 
 
 # async def get_latest_articles(website: str, num_articles) -> list[str] | None:
@@ -176,7 +178,10 @@ async def concurrent_summarize(urls: list[str], max_summary_length: int) -> dict
 
     # Run all agents in parallel
     tasks = [agent.run() for agent in agents]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
+    try:
+        results = await asyncio.gather(*tasks, return_exceptions=False)
+    except Exception as e:
+        raise e
 
     summaries = {}
     for i, history in enumerate(results):
@@ -218,7 +223,7 @@ async def get_latest_articles_and_summarize(
 if __name__ == "__main__":
     start = time.perf_counter()
     website = "https://www.csdn.net/"
-    summaries = asyncio.run(get_latest_articles_and_summarize(website, NUM_ARTICLES))
+    summaries = asyncio.run(get_latest_articles_and_summarize(website, NUM_ARTICLES, MAX_SUMMARY_LENGTH))
     print(summaries)
 
     now = datetime.now()
