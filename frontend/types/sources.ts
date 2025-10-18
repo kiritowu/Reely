@@ -7,11 +7,11 @@ import { z } from 'zod'
 // Source type enum
 export const SOURCE_TYPES = [
   'url',
-  'rss_feed',
-  'youtube_channel',
-  'youtube_playlist',
   'twitter_user',
   'reddit_subreddit',
+  'youtube_channel',
+  'youtube_playlist',
+  'rss_feed',
   'podcast_rss',
   'api_endpoint',
   'github_repo',
