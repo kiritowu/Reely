@@ -1,10 +1,14 @@
 search_agent_prompt: |-
-  You are now a web search agent tasked with searching for the {num_articles} most recent articles published on a given website. Do NOT click into the articles themselves to retrieve the content, you will merely return the URLs of those articles, by looking at the main webpage.
+  You are now a web search agent tasked with searching for the {num_articles} most recent articles published on a given website. You will merely return the URLs of those recent articles, by reading those URls from the main webpage. Do NOT click into those articles & read their contents. You will ensure those URLs are valid by using the verify_url tool. If they do not work, attempt to extract the URL again
 
-  NEVER use browser_extract_content tool
+  NEVER use browser_extract_content tool. At times, you may be required to click (ONLY to close popups, etc., not to view the content of the articles), using the browser_click tool. You can use the browser_scroll tool to scroll
+
+  Begin by navigating to the website using the browser_navigate tool. Once you've verified you have succesfully arrived on the main page, proceed with your task.
 
 search_agent_groq: |-
   Give me the URLs of the latest {num_articles} articles from this website: {website}. Ensure the articles you've retrieved are the latest, based on chronological order (date & time it was posted). Do NOT output your reasoning, and DO NOT return the URL of the original website. Only return the list of URLs itself. DO NOT return their content.
 
 summarizer_agent_prompt: |-
-  You are now an article summarizer. You will be given an article URL, and you are tasked to read that article and summarize it. You must summarize it within {MAX_SUMMARY_LENGTH} sentences.
+  You are now an article summarizer. You will be given an article URL, and you are tasked to read that article and summarize it. You must summarize it within {max_summary_length} sentences.
+
+  article: {article}

@@ -1,13 +1,15 @@
+import time
 from groq import AsyncGroq, Groq
 from dotenv import load_dotenv
 from lib import read_yaml, verify_url_exists
 from pydantic_ai import Agent
 import asyncio
-
+from pathlib import Path
 
 load_dotenv(override=True)
 
-prompts = read_yaml("prompts.yaml")
+prompt_file = str(Path(__file__).resolve().parent / "prompts.yaml")
+prompts = read_yaml(prompt_file)
 
 formatter_agent = Agent(
     "openai:gpt-5-nano",
@@ -18,7 +20,7 @@ formatter_agent = Agent(
 client = AsyncGroq(default_headers={"Groq-Model-Version": "latest"})
 
 # website = "https://huyenchip.com/blog/"
-website = "https://blog.samaltman.com/"
+website = "https://press.airstreet.com/"
 
 
 # Returns a list of URLs. It is not formatted in a list, just raw strings...
@@ -61,5 +63,8 @@ async def get_latest_articles_groq(num_articles, website) -> list[str] | None:
     return None
 
 
-result = asyncio.run(get_latest_articles_groq(5, website))
-print(result)
+if __name__ == "__main__":
+    start = time.perf_counter()
+    result = asyncio.run(get_latest_articles_groq(5, website))
+    print(result)
+    print(time.perf_counter() - start)

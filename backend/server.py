@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
-from browseruse_get_latest_articles import get_latest_articles, summarize
+from browseruse_get_latest_articles import get_latest_articles_and_summarize
 import uvicorn
 
 
@@ -17,8 +17,15 @@ mock_data = {
 async def latest_articles(
     url: str = Query(..., description="Website to look for articles"),
 ):
-    # result = await get_latest_articles(url)
-    return JSONResponse(content=mock_data)
+    print(f"Working on: {url}")
+    result: dict[str, str] | None = await get_latest_articles_and_summarize(url, num_articles=3)
+    if result:
+        result["status"] = "success"
+    # If result is None, it failed
+    else:
+        result = {}
+        result["status"] = "failed"
+    return JSONResponse(content=result)
 
 
 # @app.get("/summarize")
