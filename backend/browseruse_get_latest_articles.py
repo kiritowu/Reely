@@ -1,4 +1,5 @@
 import asyncio
+from datetime import datetime
 import os
 from pydantic_ai import Agent, ModelSettings, UsageLimits
 from pydantic_ai.exceptions import ModelHTTPError
@@ -11,6 +12,7 @@ import time
 from browser_use import Tools, Browser, ChatGoogle, ChatAnthropic, ChatBrowserUse
 from browser_use import Agent as BrowserUseAgent
 from pathlib import Path
+import json
 
 load_dotenv(override=True)
 
@@ -212,8 +214,17 @@ async def get_latest_articles_and_summarize(website, num_articles) -> dict[str, 
 
 
 if __name__ == "__main__":
-    # asyncio.run(test())
     start = time.perf_counter()
-    summaries = asyncio.run(get_latest_articles_and_summarize("https://news.ycombinator.com/", NUM_ARTICLES))
+    website = "https://www.csdn.net/"
+    summaries = asyncio.run(get_latest_articles_and_summarize(website, NUM_ARTICLES))
     print(summaries)
+
+    now = datetime.now()
+
+    # Format it as a string
+    formatted_now = now.strftime("%Y-%m-%d_%H:%M:%S")
+
     print(f"Total time: {time.perf_counter() - start}")
+
+    with open(f"summaries/{website.replace("/", "-")}_{formatted_now}.json", "w") as f:
+        json.dump(summaries, f)

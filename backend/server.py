@@ -1,3 +1,5 @@
+from datetime import datetime
+import json
 from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
 from browseruse_get_latest_articles import get_latest_articles_and_summarize
@@ -21,6 +23,12 @@ async def latest_articles(
     result: dict[str, str] | None = await get_latest_articles_and_summarize(url, num_articles=3)
     if result:
         result["status"] = "success"
+        now = datetime.now()
+        # Format it as a string
+        formatted_now = now.strftime("%Y-%m-%d_%H:%M:%S")
+        with open(f"summaries/{url.replace("/", "-")}_{formatted_now}.json", "w") as f:
+            json.dump(result, f)
+
     # If result is None, it failed
     else:
         result = {}

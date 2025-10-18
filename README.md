@@ -6,3 +6,7 @@ Tested sites include
 - https://www.deeplearning.ai/
 - https://press.airstreet.com/
 - https://news.ycombinator.com/
+- https://www.cnbc.com/world/?region=world
+- https://tech.sina.com.cn/
+- https://36kr.com/
+- https://www.csdn.net/
