@@ -1,0 +1,13 @@
+[project]
+name = "cursor-ftw"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "crawl4ai>=0.7.4",
+    "fastapi>=0.119.0",
+    "groq>=0.32.0",
+    "pydantic-ai>=1.1.0",
+    "ruamel-yaml>=0.18.15",
+]
