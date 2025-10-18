@@ -19,7 +19,7 @@ export function AccountClient({ user, sources }: AccountClientProps) {
     <div className="flex min-h-screen flex-col">
       <AppHeader />
 
-      <main className="flex-1 container px-4 py-8 mx-auto max-w-7xl w-full">
+      <main className="flex-1 container px-4 py-8 mx-auto max-w-2xl w-full">
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Account Settings</h1>

@@ -8,6 +8,7 @@ import { SourceList } from '@/components/source-list'
 import { AppHeader } from '@/components/app-header'
 import type { ContentSource } from '@/db/schema'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
+import { Rss } from 'lucide-react'
 
 interface DashboardClientProps {
   user: SupabaseUser | null
@@ -53,7 +54,10 @@ export function DashboardClient({ user, initialSources }: DashboardClientProps) 
       <main className="flex-1 container px-4 py-8 mx-auto max-w-7xl w-full">
         <div className="space-y-10">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold tracking-tight">Content Sources</h1>
+            <div className="flex items-center gap-3">
+              <Rss className="h-8 w-8 stroke-3" />
+              <h1 className="text-3xl font-bold tracking-tight">Content Sources</h1>
+            </div>
             <p className="text-sm text-muted-foreground">
               {activeSourcesCount} of {totalSourcesCount} sources active
             </p>

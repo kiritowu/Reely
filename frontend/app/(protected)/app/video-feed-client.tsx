@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import type { Video } from '@/lib/videos'
+import { getLandingVideoUrl } from '@/lib/supabase/storage'
 
 interface VideoFeedClientProps {
   videos: Video[]
@@ -16,6 +17,7 @@ export function VideoFeedClient({ videos }: VideoFeedClientProps) {
   const videoPlayerRefs = useRef<(VideoPlayerHandle | null)[]>([])
   const [activeVideoIndex, setActiveVideoIndex] = useState(0)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
+  const landingVideoUrl = getLandingVideoUrl()
 
   // Track which video is currently active
   useEffect(() => {
@@ -91,7 +93,21 @@ export function VideoFeedClient({ videos }: VideoFeedClientProps) {
   }
 
   return (
-    <div className="relative h-screen w-screen bg-background flex items-center justify-center p-0 md:p-2">
+    <div className="relative h-screen w-screen bg-black flex items-center justify-center p-0 md:p-2 overflow-hidden">
+      {/* Background Video - Only visible on desktop outside the video window */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover hidden md:block"
+      >
+        <source src={landingVideoUrl} type="video/mp4" />
+      </video>
+
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-muted/[0.99] hidden md:block" />
+
       {/* Back Button - Fixed to screen top left */}
       <Button 
         asChild
@@ -104,7 +120,7 @@ export function VideoFeedClient({ videos }: VideoFeedClientProps) {
       </Button>
 
       {/* Rounded Window Container - Desktop only, Full screen on mobile */}
-      <div className="relative h-full w-full md:h-[96vh] md:max-h-[880px] md:w-full md:max-w-[480px] md:rounded-2xl md:shadow-2xl overflow-hidden bg-black">
+      <div className="relative h-full w-full md:h-[96vh] md:max-h-[880px] md:w-full md:max-w-[480px] md:rounded-2xl md:shadow-2xl overflow-hidden bg-black z-10">
         {/* Video Feed - Scrolls within the window */}
         <div 
           ref={scrollContainerRef}
