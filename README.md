@@ -45,10 +45,10 @@ In today's world, we're drowning in fragmented, polarized, and language-siloed i
 ## 🎯 Key Features
 
 ### 1. **Flexible Source Management**
-Add any website URL - our AI agents handle the rest. No API required, no RSS needed.
+Add any website URL - our AI agents handle the rest. No API endpoints or RSS feeds required.
 
 ### 2. **Intelligent Content Extraction**
-Using browser automation and vision models, we extract articles even from JavaScript-heavy sites and complex layouts.
+Using browser automation and large language models, we crawl and extract articles even from JavaScript-heavy sites and complex layouts.
 
 ### 3. **Multi-Format Output**
 - **Video Reels**: SORA-generated videos with ElevenLabs voiceovers
