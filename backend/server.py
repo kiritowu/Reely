@@ -1,5 +1,6 @@
 from datetime import datetime
 import json
+from pathlib import Path
 from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -27,6 +28,9 @@ app = FastAPI()
 
 MAX_CONCURRENT_REQUESTS = 10
 semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
+
+NUM_RECENT_ARTICLES = 3  # No. of recent articles to return per website
+MAX_SUMMARY_LENGTH = 4  # Max no. of sentences for the summary
 
 
 async def process_scene(scene: Scene, scene_index: int):
@@ -82,23 +86,23 @@ async def latest_articles(
 ):
     print(f"Working on: {url}")
     summaries: dict[str, str] | None = await get_latest_articles_and_summarize(
-        url, num_articles=3, max_summary_length=4
+        url, num_articles=NUM_RECENT_ARTICLES, max_summary_length=MAX_SUMMARY_LENGTH
     )
-    if summaries:
-        result = {}
-        result["status"] = "success"
-        result["summaries"] = summaries
-        now = datetime.now()
-        # Format it as a string
-        formatted_now = now.strftime("%Y-%m-%d_%H:%M:%S")
-        with open(f"summaries/{url.replace("/", "-")}_{formatted_now}.json", "w") as f:
-            json.dump(summaries, f)
 
-    # If result is None, it failed
-    else:
-        result = {}
-        result["status"] = "failed"
-    return JSONResponse(content=result)
+    if not summaries:
+        result = Articles(status="failed", summaries={})
+        return JSONResponse(content=result)
+
+    result = Articles(status="success", summaries=summaries)
+
+    now = datetime.now()
+    formatted_now = now.strftime("%Y-%m-%d_%H:%M:%S")
+    parent_path = Path(__file__).parent / "../summaries"
+
+    with open(f"{parent_path}/{url.replace("/", "-")}_{formatted_now}.json", "w") as f:
+        json.dump(summaries, f)
+
+    return await generate_video(result)
 
 
 @app.get("/summarize")
@@ -107,7 +111,7 @@ async def summarize(
 ):
     print(f"Working on: {url}")
 
-    result: dict[str, str] = await concurrent_summarize([url], max_summary_length=4)
+    result: dict[str, str] = await concurrent_summarize([url], max_summary_length=MAX_SUMMARY_LENGTH)
 
     if len(result):
         result["status"] = "success"
@@ -128,7 +132,7 @@ async def generate_video(articles: Articles):
     # result = await get_latest_articles(url)
 
     structured_articles = {}
-    for article_url, content in articles.summaries:
+    for article_url, content in articles.summaries.items():
         scenes = await convert_to_scenes(
             content,
         )

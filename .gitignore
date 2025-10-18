@@ -39,5 +39,5 @@ yarn-error.log*
 next-env.d.ts
 
 
-/temp-profile-*/
+temp-profile-*/
 /backend/__pycache__
