@@ -57,7 +57,7 @@ export function ListSlide({ slide }: ListSlideProps) {
   return (
     <div className="flex h-full w-full flex-col justify-center px-8 py-12">
       <div className="mb-8 flex items-center justify-center gap-2">
-        <List className="h-6 w-6 text-white/80" strokeWidth={2.5} />
+        <List className="h-6 w-6 text-white/80" strokeWidth={2} />
         <h2 className="text-center text-2xl font-bold tracking-tight text-white">
           {slide.content.heading || 'Key Points'}
         </h2>
@@ -65,23 +65,54 @@ export function ListSlide({ slide }: ListSlideProps) {
       <div className={`mx-auto w-full ${
         layout === 'grid' 
           ? 'max-w-5xl grid grid-cols-2 gap-5' 
-          : 'max-w-3xl space-y-4'
+          : 'max-w-4xl space-y-4'
       }`}>
         {slide.content.items.map((item, index) => {
           const Icon = getIconComponent(item.icon)
           const iconColorProps = getIconColor(item.iconColor)
           
+          if (layout === 'vertical') {
+            // Horizontal layout for vertical list (icon left, content right)
+            return (
+              <div
+                key={index}
+                className="group flex items-center gap-4 rounded-2xl border border-white/5 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10 hover:scale-[1.02]"
+              >
+                {Icon && (
+                  <div className={`flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl ${iconColorProps.bgClassName} transition-transform group-hover:scale-110`}>
+                    <Icon 
+                      className={`h-7 w-7 ${iconColorProps.className || ''}`}
+                      style={iconColorProps.style}
+                      strokeWidth={2} 
+                    />
+                  </div>
+                )}
+                <div className="flex-1 space-y-1">
+                  <h3 className="text-lg font-semibold leading-snug text-white transition-colors">
+                    {item.title}
+                  </h3>
+                  {item.detail && (
+                    <p className="text-sm leading-relaxed text-white/70 transition-colors group-hover:text-white/85">
+                      {item.detail}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )
+          }
+          
+          // Grid layout (icon top, content below - left aligned)
           return (
             <div
               key={index}
-              className="group flex flex-col items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm text-center transition-all hover:border-white/20 hover:bg-white/10 hover:scale-[1.02]"
+              className="group flex flex-col items-start gap-4 rounded-2xl border border-white/5 bg-white/5 p-6 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10 hover:scale-[1.02]"
             >
               {Icon && (
                 <div className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${iconColorProps.bgClassName} transition-transform group-hover:scale-110`}>
                   <Icon 
                     className={`h-6 w-6 ${iconColorProps.className || ''}`}
                     style={iconColorProps.style}
-                    strokeWidth={2.5} 
+                    strokeWidth={2} 
                   />
                 </div>
               )}

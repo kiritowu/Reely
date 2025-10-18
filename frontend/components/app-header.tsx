@@ -12,6 +12,7 @@ import {
 import { Play, LogOut, User, Video, MoreVertical } from 'lucide-react'
 import Link from 'next/link'
 import { signOut } from '@/actions/auth'
+import { WatchFeedButton } from '@/components/watch-feed-button'
 
 export function AppHeader() {
 
@@ -23,15 +24,10 @@ export function AppHeader() {
           <span className="text-xl font-bold text-primary">Reely</span>
         </Link>
         <div className="flex items-center gap-2">
-          <Button asChild variant="default" size="sm">
-            <Link href="/app">
-              <Video className="h-4 w-4" />
-              Reel Feed
-            </Link>
-          </Button>
+          <WatchFeedButton />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
+              <Button variant="outline">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

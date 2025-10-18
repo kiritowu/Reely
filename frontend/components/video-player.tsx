@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState, forwardRef, useImperativeHandle } from 'react'
-import { Heart, ThumbsDown, Play, Pause, Volume2, VolumeX, Zap, TrendingUp, FlaskConical, Briefcase, Trophy, Clapperboard, HeartPulse } from 'lucide-react'
+import { Heart, Share2, Play, Pause, Volume2, VolumeX, Zap, TrendingUp, FlaskConical, Briefcase, Trophy, Clapperboard, HeartPulse } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
@@ -41,7 +41,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
     const [isPlaying, setIsPlaying] = useState(false)
     const [isMuted, setIsMuted] = useState(true) // Will be updated from localStorage
     const [liked, setLiked] = useState(false)
-    const [disliked, setDisliked] = useState(false)
+    const [shared, setShared] = useState(false)
     const [likeCount, setLikeCount] = useState(0)
     const [showPlayIcon, setShowPlayIcon] = useState(false)
     const [isClient, setIsClient] = useState(false)
@@ -79,9 +79,9 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
             container.scrollBy({ left: slideWidth, behavior: 'smooth' })
           }
         } else {
-          // If on first slide (video), go to last slide
+          // If on first slide (video), don't navigate left (prevent jumping to last slide)
           if (currentSlide === 0) {
-            container.scrollTo({ left: slideWidth * (totalSlides - 1), behavior: 'smooth' })
+            return // Do nothing when trying to go left from the video slide
           } else {
             container.scrollBy({ left: -slideWidth, behavior: 'smooth' })
           }
@@ -97,10 +97,15 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       const randomLikes = (seed * 9876543) % 10000 + 1000
       setLikeCount(randomLikes)
       
-      // Load mute preference from localStorage
+      // Load mute preference from localStorage and apply it to the video element
       const savedMutePreference = localStorage.getItem('videoMuted')
       if (savedMutePreference !== null) {
-        setIsMuted(savedMutePreference === 'true')
+        const shouldMute = savedMutePreference === 'true'
+        setIsMuted(shouldMute)
+        // Also set it directly on the video element to ensure it's applied immediately
+        if (videoRef.current) {
+          videoRef.current.muted = shouldMute
+        }
       }
     }, [video.id])
 
@@ -140,7 +145,8 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
           .play()
           .then(() => setIsPlaying(true))
           .catch((error) => {
-            console.error('Auto-play failed:', error)
+            // Silently handle autoplay errors - browsers block autoplay without user interaction
+            // This is expected behavior and not an actual error
             setIsPlaying(false)
           })
       } else {
@@ -185,22 +191,11 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
       } else {
         setLiked(true)
         setLikeCount((prev) => prev + 1)
-        if (disliked) {
-          setDisliked(false)
-        }
       }
     }
 
-    const handleDislike = () => {
-      if (disliked) {
-        setDisliked(false)
-      } else {
-        setDisliked(true)
-        if (liked) {
-          setLiked(false)
-          setLikeCount((prev) => prev - 1)
-        }
-      }
+    const handleShare = () => {
+      setShared(!shared)
     }
 
     return (
@@ -222,6 +217,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
               loop
               playsInline
               muted={isMuted}
+              preload="auto"
               className="h-full w-full object-cover"
               onClick={togglePlayPause}
             />
@@ -251,8 +247,8 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                   variant="ghost"
                   onClick={handleLike}
                   className={cn(
-                    'rounded-full bg-black/20 backdrop-blur-sm transition-colors hover:bg-black/40',
-                    liked && 'text-red-500'
+                    'rounded-full bg-white/10 backdrop-blur-sm backdrop-brightness-75 border border-white/10 transition-colors hover:bg-white/20',
+                    liked && 'text-red-500 border-red-500/50'
                   )}
                 >
                   <Heart
@@ -268,25 +264,25 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                 )}
               </div>
 
-              {/* Dislike Button */}
+              {/* Share Button */}
               <div className="flex flex-col items-center gap-1">
                 <Button
                   size="icon-lg"
                   variant="ghost"
-                  onClick={handleDislike}
+                  onClick={handleShare}
                   className={cn(
-                    'rounded-full bg-black/20 backdrop-blur-sm transition-colors hover:bg-black/40',
-                    disliked && 'text-blue-500'
+                    'rounded-full bg-white/10 backdrop-blur-sm backdrop-brightness-75 border border-white/10 transition-colors hover:bg-white/20',
+                    shared && 'text-green-500 border-green-500/50'
                   )}
                 >
-                  <ThumbsDown
+                  <Share2
                     className="h-7 w-7"
-                    fill={disliked ? 'currentColor' : 'none'}
+                    fill={shared ? 'currentColor' : 'none'}
                     strokeWidth={2}
                   />
                 </Button>
                 <span className="text-xs font-semibold text-white drop-shadow-lg">
-                  Dislike
+                  Share
                 </span>
               </div>
 
@@ -296,7 +292,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                   size="icon-lg"
                   variant="ghost"
                   onClick={toggleMute}
-                  className="rounded-full bg-black/20 backdrop-blur-sm transition-colors hover:bg-black/40"
+                  className="rounded-full bg-white/10 backdrop-blur-sm backdrop-brightness-75 border border-white/10 transition-colors hover:bg-white/20"
                 >
                   {isMuted ? (
                     <VolumeX className="h-7 w-7 text-white" strokeWidth={2} />
@@ -312,7 +308,7 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
             <div className="max-w-md pb-6 space-y-2.5">
               {/* Category, Source & Timestamp Row */}
               <div className="flex items-center gap-2 text-xs flex-wrap">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-sm border border-white/20">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/10 backdrop-blur-sm border border-white/10">
                   {(() => {
                     const Icon = getCategoryIcon(video.category)
                     return <Icon className="h-3 w-3 text-white/80" />
@@ -323,8 +319,8 @@ export const VideoPlayer = forwardRef<VideoPlayerHandle, VideoPlayerProps>(
                 </div>
                 <span className="text-white/40">•</span>
                 <span className="text-white/70 font-medium">{video.source}</span>
-                <span className="text-white/40">•</span>
-                <span className="text-white/60">{video.timestamp}</span>
+                {/* <span className="text-white/40">•</span>
+                <span className="text-white/60">{video.timestamp}</span> */}
               </div>
 
               {/* Title - with auto-scroll for long text */}

@@ -10,7 +10,7 @@ export function ActionSlide({ slide }: ActionSlideProps) {
   return (
     <div className="flex h-full w-full flex-col justify-center px-8 py-12">
       <div className="mb-8 flex items-center justify-center gap-2">
-        <Zap className="h-6 w-6 text-white/80" strokeWidth={2.5} />
+        <Zap className="h-6 w-6 text-white/80" strokeWidth={2} />
         <h2 className="text-center text-2xl font-bold tracking-tight text-white">
           {slide.content.heading || "What's Next?"}
         </h2>
@@ -21,10 +21,10 @@ export function ActionSlide({ slide }: ActionSlideProps) {
             {slide.content.items.map((item, index) => (
               <div
                 key={index}
-                className="group flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
+                className="group flex items-center gap-3 rounded-2xl border border-white/5 bg-white/5 p-5 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
               >
                 <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-blue-500/10">
-                  <CheckCircle2 className="h-4 w-4 text-blue-400" strokeWidth={2.5} />
+                  <CheckCircle2 className="h-4 w-4 text-blue-400" strokeWidth={2} />
                 </div>
                 <p className="flex-1 text-base text-white/90 transition-colors group-hover:text-white">
                   {item}
@@ -37,12 +37,12 @@ export function ActionSlide({ slide }: ActionSlideProps) {
         {slide.content.cta && (
           <div className="flex justify-center pt-4">
             <Button
-              className="group rounded-full px-8 py-6 text-base font-semibold shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30"
+              className="group rounded-full px-14! py-6 text-base font-semibold shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30"
               size="lg"
               onClick={() => window.open(slide.content.cta?.url, '_blank')}
             >
               {slide.content.cta.text}
-              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={2} />
             </Button>
           </div>
         )}

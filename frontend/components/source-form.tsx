@@ -255,27 +255,6 @@ export function SourceForm({ isOpen, onClose, onSuccess, editingSource }: Source
                 )}
               />
 
-              {/* Description */}
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Description (Optional)</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="A brief description of this source..."
-                        disabled={mutation.isPending}
-                        className="resize-none"
-                        rows={3}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               <div className="grid grid-cols-2 gap-4">
                 {/* Category */}
                 <FormField
@@ -338,28 +317,30 @@ export function SourceForm({ isOpen, onClose, onSuccess, editingSource }: Source
                 />
               </div>
 
-              {/* Active Status */}
-              <FormField
-                control={form.control}
-                name="isActive"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                      <FormLabel className="text-base">Active Status</FormLabel>
-                      <FormDescription>
-                        Enable this source to start receiving content
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        disabled={mutation.isPending}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              {/* Active Status - Only show when editing */}
+              {isEditing && (
+                <FormField
+                  control={form.control}
+                  name="isActive"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <div className="space-y-0.5">
+                        <FormLabel className="text-base">Active Status</FormLabel>
+                        <FormDescription>
+                          Enable this source to start receiving content
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={mutation.isPending}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
 
             {mutation.isError && (

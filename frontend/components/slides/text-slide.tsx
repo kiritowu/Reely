@@ -29,8 +29,8 @@ export function TextSlide({ slide }: TextSlideProps) {
           </h2>
         )}
         
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-colors hover:border-white/20">
-          <p className="text-center text-lg leading-relaxed text-white/90">
+        <div className="rounded-2xl border border-white/5 bg-white/5 p-8 backdrop-blur-sm transition-colors hover:border-white/20">
+          <p className="text-left text-lg leading-relaxed text-white/90">
             {slide.content.body}
           </p>
         </div>
@@ -40,7 +40,7 @@ export function TextSlide({ slide }: TextSlideProps) {
             highlightStyle === 'gradient'
               ? 'border-primary/30 bg-primary/10 hover:border-primary/50'
               : highlightStyle === 'minimal'
-              ? 'border-white/10 bg-white/5 hover:border-white/20'
+              ? 'border-white/5 bg-white/5 hover:border-white/20'
               : 'border-white/20 bg-white/10 hover:border-white/30'
           }`}>
             <div className="flex items-center justify-center gap-2 px-6 pt-5 pb-3">

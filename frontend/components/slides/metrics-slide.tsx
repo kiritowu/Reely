@@ -24,7 +24,7 @@ export function MetricsSlide({ slide }: MetricsSlideProps) {
   return (
     <div className="flex h-full w-full flex-col justify-center px-8 py-12">
       <div className="mb-8 flex items-center justify-center gap-2">
-        <BarChart3 className="h-6 w-6 text-white/80" strokeWidth={2.5} />
+        <BarChart3 className="h-6 w-6 text-white/80" strokeWidth={2} />
         <h2 className="text-center text-2xl font-bold tracking-tight text-white">
           {slide.content.heading || 'By The Numbers'}
         </h2>
@@ -33,10 +33,10 @@ export function MetricsSlide({ slide }: MetricsSlideProps) {
         {slide.content.metrics.map((metric, index) => (
           <div
             key={index}
-            className="group relative flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-6 py-10 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
+            className="group flex flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 px-6 py-10 backdrop-blur-sm transition-all hover:border-white/20 hover:bg-white/10"
           >
             {metric.change && (
-              <div className={`absolute right-2.5 top-2.5 flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold transition-all ${
+              <div className={`mb-1 flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold transition-all ${
                 metric.trend === 'up' 
                   ? 'bg-green-500/10 text-green-400 group-hover:bg-green-500/20' 
                   : metric.trend === 'down' 

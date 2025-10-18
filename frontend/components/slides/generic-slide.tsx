@@ -14,7 +14,7 @@ export function GenericSlide({ slide }: GenericSlideProps) {
           <div className="text-center">
             <div className="mb-6 flex items-center justify-center gap-3">
               <div className="rounded-xl bg-amber-500/20 p-3">
-                <AlertCircle className="h-6 w-6 text-amber-400" strokeWidth={2.5} />
+                <AlertCircle className="h-6 w-6 text-amber-400" strokeWidth={2} />
               </div>
               <p className="text-sm font-medium uppercase tracking-wider text-amber-400/80">
                 Unknown Slide Type: {slide.type}
@@ -26,7 +26,7 @@ export function GenericSlide({ slide }: GenericSlideProps) {
               </h2>
             )}
             {slide.content !== undefined && (
-              <div className="rounded-xl border border-white/10 bg-black/20 p-6">
+              <div className="rounded-xl border border-white/5 bg-black/20 p-6">
                 <div className="mb-3 flex items-center gap-2 text-white/60">
                   <Code2 className="h-4 w-4" strokeWidth={2} />
                   <span className="text-xs font-medium uppercase tracking-wider">
