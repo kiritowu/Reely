@@ -6,8 +6,6 @@ Reely transforms any web source into engaging video reels and text summaries - f
 
 [![Cursor Hackathon Singapore 2025](https://img.shields.io/badge/Cursor%20Hackathon-Singapore%202025-6C5CE7?style=for-the-badge)](https://luma.com/cursor-hack-sg)
 
----
-
 ## 🌍 The Problem
 
 In today's world, we're drowning in fragmented, polarized, and language-siloed information. Breakthrough AI developments in Chinese media, alternative perspectives outside dominant narratives, and niche expert insights - all get lost in translation.
@@ -23,8 +21,6 @@ In today's world, we're drowning in fragmented, polarized, and language-siloed i
 - 🎥 **Engaging Formats** - Get AI-generated video summaries powered by SORA or swipeable text summaries
 - 🌐 **Cross-Language Intelligence** - Track content in languages you don't even speak
 - 📊 **Real-World Applications** - Monitor SEC filings, follow thought leaders, or aggregate niche industry news
-
----
 
 ## 🚀 Tech Stack
 
@@ -42,8 +38,6 @@ In today's world, we're drowning in fragmented, polarized, and language-siloed i
 - **🎨 Tailwind CSS** + **Radix UI** - Modern, accessible UI components
 - **🔄 TanStack Query** - Powerful data fetching and caching
 
----
-
 ## 🎯 Key Features
 
 ### 1. **Flexible Source Management**
@@ -59,8 +53,6 @@ Using browser automation and vision models, we extract articles even from JavaSc
 
 ### 4. **Cross-Language Support**
 Track content in any language - summaries are generated in your preferred language.
-
----
 
 ## 🏗️ Architecture
 
@@ -89,8 +81,6 @@ Track content in any language - summaries are generated in your preferred langua
 │              │   │                 │   │  Generation │
 └──────────────┘   └─────────────────┘   └─────────────┘
 ```
-
----
 
 ## 🛠️ Getting Started
 
@@ -144,8 +134,6 @@ pnpm dev
 
 The frontend will start at `http://localhost:3000`
 
----
-
 ## 📝 Tested Sources
 
 We've successfully tested Reely with diverse sources:
@@ -155,8 +143,6 @@ We've successfully tested Reely with diverse sources:
 - 🌏 **International**: CNBC World, 36Kr (China), CSDN (Chinese dev community)
 - 👤 **Personal Blogs**: Sam Altman, Chip Huyen
 - 🐦 **Social Media**: X/Twitter profiles
-
----
 
 ## 🎥 API Usage
 
@@ -176,8 +162,6 @@ GET http://localhost:8000/summarize?url=https://example.com/article
 
 Returns text summary only.
 
----
-
 ## 👥 Team
 
 Built with 💜 by:
@@ -186,8 +170,6 @@ Built with 💜 by:
 - **Wong Zhao Wu (Bryan)** - [GitHub](https://github.com/kiritowu) | [LinkedIn](https://www.linkedin.com/in/zw-wong/)
 - **Muhammad Faqih Akmal** - [GitHub](https://github.com/faqihxdev) | [LinkedIn](https://www.linkedin.com/in/faqih-akmal/)
 
----
-
 ## 🌟 Why Reely?
 
 > "In a world where AI breakthroughs and geopolitical shifts happen daily, **speed and access are the new moats**."
@@ -195,8 +177,6 @@ Built with 💜 by:
 Reely bridges the digital divide by making global information truly accessible, customizable, and fast - whether you're tracking SEC filings for investment decisions, following your favorite blogger, or staying updated on news in languages you don't speak.
 
 **We're not just curating content - we're democratizing access to information.**
-
----
 
 <div align="center">
   <p>Made with ❤️ at Cursor Hackathon Singapore 2025</p>
