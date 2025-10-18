@@ -150,7 +150,7 @@ async def get_latest_articles(website: str, num_articles) -> list[str] | None:
 #     return dict(zip(urls, summaries))
 
 
-async def concurrent_summarize(urls: list[str]) -> dict[str, str]:
+async def concurrent_summarize(urls: list[str], max_summary_length: int) -> dict[str, str]:
     num_urls = len(urls)
     # Create n separate browser instances
     browsers = [
@@ -164,7 +164,7 @@ async def concurrent_summarize(urls: list[str]) -> dict[str, str]:
     # Create n agents with different tasks
     agents = [
         BrowserUseAgent(
-            task=prompts["summarizer_agent_prompt"].format(max_summary_length=MAX_SUMMARY_LENGTH, article=urls[i]),
+            task=prompts["summarizer_agent_prompt"].format(max_summary_length=max_summary_length, article=urls[i]),
             browser=browsers[i],
             # llm=ChatGoogle(model=GOOGLE_MODEL_NAME),
             llm=SUMMARIZE_ARTICLE_LLM,
@@ -190,7 +190,9 @@ async def concurrent_summarize(urls: list[str]) -> dict[str, str]:
     return summaries
 
 
-async def get_latest_articles_and_summarize(website, num_articles) -> dict[str, str] | None:
+async def get_latest_articles_and_summarize(
+    website: str, num_articles: int, max_summary_length: int
+) -> dict[str, str] | None:
     get_articles_start = time.perf_counter()
     latest_urls = await get_latest_articles(website, num_articles)
     print(latest_urls)
@@ -199,7 +201,7 @@ async def get_latest_articles_and_summarize(website, num_articles) -> dict[str, 
     if latest_urls:
         print(f"Summarizing the following articles: {latest_urls}")
         get_summaries_start = time.perf_counter()
-        result = await concurrent_summarize(latest_urls)
+        result = await concurrent_summarize(latest_urls, max_summary_length)
         print(f"Successfully retrieved {len(result)} summaries in {time.perf_counter() - get_summaries_start}")
         return result
 

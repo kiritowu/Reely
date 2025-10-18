@@ -2,10 +2,9 @@ from datetime import datetime
 import json
 from fastapi import FastAPI, Query
 from fastapi.responses import JSONResponse
-<<<<<<< HEAD
+from pydantic import BaseModel
 from browseruse_get_latest_articles import get_latest_articles_and_summarize
-=======
-from browseruse_get_latest_articles import get_latest_articles, summarize
+
 from utils.elevenlabs import text_to_speech
 from utils.scene_converter import (
     Scene,
@@ -19,7 +18,6 @@ from utils.video_processing import (
     combine_video_audio_with_padding,
     concatenate_videos,
 )
->>>>>>> a8d5dc9 (feat: generate reels using sora)
 import uvicorn
 import asyncio
 from ruamel.yaml import YAML
@@ -29,12 +27,6 @@ app = FastAPI()
 
 MAX_CONCURRENT_REQUESTS = 10
 semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
-
-
-mock_data = {
-    "https://blog.samaltman.com/sora-update-number-1": "Sam Altman announced the launch of Sora, an app featuring Sora 2 AI for video creation, sharing, and viewing, designed to foster creativity and new social dynamics. The app includes features like a cameo option for consistent character appearances in videos. While acknowledging risks such as addiction and misuse of likeness, the team has implemented safeguards to mitigate these issues. Sora is guided by principles of long-term user satisfaction, user control, and participation, with ongoing adjustments based on user impact and wellbeing monitoring. The goal is to empower users to quickly translate ideas into videos and achieve their creative aspirations.",
-    # "https://blog.samaltman.com/sora-2": "The article announces the launch of a new app called Sora, featuring the Sora 2 model, designed to simplify the creation, sharing, and viewing of videos. It highlights the potential for a creative explosion through this technology, with features like the cameo option that allows users to insert themselves and friends into videos, enhancing social connection. The team acknowledges concerns about potential negative effects, such as addiction and misuse for bullying or deepfakes, and has implemented safeguards and content moderation to address these risks. The article outlines key principles guiding Sora's development, including optimizing for long-term user satisfaction, encouraging user control over their feed, prioritizing creation, and helping users achieve their long-term goals. The team plans to continue experimenting with different approaches to maintain a positive user experience and is committed to making significant changes or discontinuing the service if it does not improve users' lives over time.",
-}
 
 
 async def process_scene(scene: Scene, scene_index: int):
@@ -56,9 +48,7 @@ async def process_scene(scene: Scene, scene_index: int):
                 audio_bytes = await text_to_speech(scene.voice_over)
 
                 # Combine video and audio
-                final_video_path = await combine_video_audio_with_padding(
-                    sora_video_path, audio_bytes
-                )
+                final_video_path = await combine_video_audio_with_padding(sora_video_path, audio_bytes)
 
                 print(f"✓ Scene {scene_index} processed successfully")
                 return {
@@ -77,9 +67,7 @@ async def process_scene(scene: Scene, scene_index: int):
                 "error": error_msg,
             }
         except Exception as e:
-            error_msg = (
-                f"✗ Error processing scene {scene_index}: {type(e).__name__}: {str(e)}"
-            )
+            error_msg = f"✗ Error processing scene {scene_index}: {type(e).__name__}: {str(e)}"
             print(error_msg)
             return {
                 "scene_index": scene_index,
@@ -92,28 +80,38 @@ async def process_scene(scene: Scene, scene_index: int):
 async def latest_articles(
     url: str = Query(..., description="Website to look for articles"),
 ):
-<<<<<<< HEAD
     print(f"Working on: {url}")
-    result: dict[str, str] | None = await get_latest_articles_and_summarize(url, num_articles=3)
-    if result:
+    summaries: dict[str, str] | None = await get_latest_articles_and_summarize(
+        url, num_articles=3, max_summary_length=4
+    )
+    if summaries:
+        result = {}
         result["status"] = "success"
+        result["summaries"] = summaries
         now = datetime.now()
         # Format it as a string
         formatted_now = now.strftime("%Y-%m-%d_%H:%M:%S")
         with open(f"summaries/{url.replace("/", "-")}_{formatted_now}.json", "w") as f:
-            json.dump(result, f)
+            json.dump(summaries, f)
 
     # If result is None, it failed
     else:
         result = {}
         result["status"] = "failed"
     return JSONResponse(content=result)
-=======
+
+
+class Articles(BaseModel):
+    summaries: dict[str, str]
+    status: str
+
+
+@app.post("/sora")
+async def generate_video(articles: Articles):
     # result = await get_latest_articles(url)
-    articles = mock_data
 
     structured_articles = {}
-    for article_url, content in articles.items():
+    for article_url, content in articles.summaries:
         scenes = await convert_to_scenes(
             content,
         )
@@ -132,9 +130,7 @@ async def latest_articles(
         valid_scenes = []
         for idx, result in enumerate(processed_scenes):
             if isinstance(result, Exception):
-                print(
-                    f"✗ Scene {idx} raised exception: {type(result).__name__}: {result}"
-                )
+                print(f"✗ Scene {idx} raised exception: {type(result).__name__}: {result}")
                 valid_scenes.append(
                     {
                         "scene_index": idx,
@@ -149,9 +145,7 @@ async def latest_articles(
                 valid_scenes.append(result)
             else:
                 print(f"✗ Scene {idx} returned unexpected result: {result}")
-                valid_scenes.append(
-                    {"scene_index": idx, "error": "Unexpected result format"}
-                )
+                valid_scenes.append({"scene_index": idx, "error": "Unexpected result format"})
 
         if not final_videos:
             print(f"✗ No valid videos generated for {article_url}")
@@ -171,17 +165,6 @@ async def latest_articles(
         }
 
     return JSONResponse(content=structured_articles)
->>>>>>> a8d5dc9 (feat: generate reels using sora)
-
-
-# @app.get("/summarize")
-# async def summarize_endpoint(
-#     url: str = Query(..., description="Input string to summarize"),
-#     point_form: bool = Query(False, description="Return summary in point form"),
-# ):
-#     # logging.info(f"Point form: {point_form}")
-#     summary = await _scrape_and_filter_webpage(url, point_form=point_form)
-#     return JSONResponse(content={"summary": summary})
 
 
 if __name__ == "__main__":
