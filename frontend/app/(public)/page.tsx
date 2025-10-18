@@ -20,7 +20,7 @@ export default function LandingPage() {
       </video>
 
       {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/95" />
+      <div className="absolute inset-0 bg-background/95" />
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col">
@@ -54,7 +54,7 @@ export default function LandingPage() {
               <Button size="lg" asChild>
                 <Link href="/auth">
                   Get Started
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm">
