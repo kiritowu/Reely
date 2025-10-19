@@ -45,8 +45,8 @@ export default function LandingPage() {
                 Your Content, Reel-ified
               </h1>
               <p className="text-xl text-white/90 drop-shadow-md">
-                Aggregate content from multiple sources and consume it in a beautiful, TikTok-style interface. 
-                RSS feeds, YouTube, social media, and more, all in one swipeable feed.
+                Turn any web source into text summaries and video reels.
+                From indie blogs to social media - create your custom feeds, all in one swipeable interface.
               </p>
             </div>
 
@@ -71,7 +71,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">Multi-Source Feeds</h3>
                 <p className="text-sm text-foreground/80 text-center">
-                  RSS, YouTube, Twitter, Reddit, podcasts, and more, all in one feed.
+                  Any website - from founder blogs to news sites - all in one feed. No RSS required.
                 </p>
               </div>
 
