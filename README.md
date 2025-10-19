@@ -1,8 +1,6 @@
 # 🎬 Reely
 
-> **Breaking down information silos, one source at a time.**
-
-Reely transforms any web source into engaging video reels and text summaries - from indie blogs in Japanese to local news sites in any language. Built to democratize access to global information beyond mainstream media.
+Reely turns any web source into text summaries and engaging video reels - from indie blogs to social media feeds - create your customised content feeds in one beautiful, swipeable interface.
 
 [![Cursor Hackathon Singapore 2025](https://img.shields.io/badge/Cursor%20Hackathon-Singapore%202025-6C5CE7?style=for-the-badge)](https://luma.com/cursor-hack-sg)
 
