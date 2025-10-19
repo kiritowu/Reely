@@ -36,7 +36,7 @@ In today's world, we're drowning in fragmented, polarized, and language-siloed i
 
 ### Frontend (TypeScript)
 - **⚛️ Next.js 15** - React framework with App Router
-- **🗄️ Supabase** - Authentication & database (PostgreSQL + Drizzle ORM)
+- **🗄️ Supabase** - Authentication, database (PostgreSQL + Drizzle ORM) & storage for videos
 - **🎨 Tailwind CSS** + **Radix UI** - Modern, accessible UI components
 - **🔄 TanStack Query** - Powerful data fetching and caching
 
@@ -179,6 +179,8 @@ Built with 💜 by:
 Reely bridges the digital divide by making global information truly accessible, customizable, and fast - whether you're tracking SEC filings for investment decisions, following your favorite blogger, or staying updated on news in languages you don't speak.
 
 **We're not just curating content - we're democratizing access to information.**
+
+---
 
 <div align="center">
   <p>Made with ❤️ at Cursor Hackathon Singapore 2025</p>
